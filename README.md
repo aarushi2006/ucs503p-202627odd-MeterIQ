@@ -1,8 +1,21 @@
-# UCS503P Project Template
+# MeterIQ-Explainable Smart Meter Analytics Platform
 
-This is a project template for UCS503P Project (2026-27
-ODD). 
+Course Project for UCS503P: Software Engineering
+Thapar Institute of Engineering and Technology,Patiala
 
+# Group Members & Roles
+1. Yashit Arora: 1024160006
+2. Aarushi Gahlawat: 1024160008
+Project: MeterIQ
+Course: UCS503P(Software Engineering)
+
+# Project Overview
+MeterIQ is an explainable smart-meter analytics platform designed for Indian Electricity distribution networks
+the platform integrates two complementary modules:
+1. *Anomaly/theft-risk Detection*
+2. *Short-Term Load Forecasting*
+
+The system uses real Indian Smart-meter data from Mathura and Bareilly to identify suspicious consumption behavior and forecast electricity demand. The goal is to convert large volumes of smart-meter data into actionable, explainable insights for electricity distribution utilities 
 There are 3 reports in LaTeX format, namely *a*)
 Project Proposal, *b*) Project Report Prototype Stage,
 and *c*) Project Report Final -- each in their
