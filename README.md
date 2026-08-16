@@ -15,7 +15,14 @@ the platform integrates two complementary modules:
 1. *Anomaly/theft-risk Detection*
 2. *Short-Term Load Forecasting*
 
-The system uses real Indian Smart-meter data from Mathura and Bareilly to identify suspicious consumption behavior and forecast electricity demand. The goal is to convert large volumes of smart-meter data into actionable, explainable insights for electricity distribution utilities 
+The system uses real Indian Smart-meter data from Mathura and Bareilly to identify suspicious consumption behavior and forecast electricity demand. The goal is to convert large volumes of smart-meter data into actionable, explainable insights for electricity distribution utilities.
+
+Rather than treating anomaly detection and load forecasting as two different tasks, MeterIQ integrates these two into a single decision support platform.
+
+# System Architecture 
+MeterIQ follows an integrates analytics pipeline
+Smart meter data -> Clean and Reassemble -> Feature Engineering ->Anomaly detection + Load Forecasting-> Decision Support 
+
 There are 3 reports in LaTeX format, namely *a*)
 Project Proposal, *b*) Project Report Prototype Stage,
 and *c*) Project Report Final -- each in their
