@@ -10,19 +10,19 @@
 % -----------------------------------------------------
 
 % Variable: Lab Instructor
-\makeatletter \newcommand{\BvrSetLabInstructor}[1]{%
+\makeatletter
+\newcommand{\BvrSetLabInstructor}[1]{%
   \gdef\Bvr@LabInstructor{#1}}
-% default
-\newcommand{\Bvr@LabInstructor}{Dr. Raghav %
-  B. Venkataramaiyer}
-% public accessor
+\newcommand{\Bvr@LabInstructor}{Dr. Raghav B. Venkataramaiyer}
 \newcommand{\BvrLabInstructorValue}{\Bvr@LabInstructor}
 \makeatother
 
 % Add subtitle
 \usepackage{titling}
-% -- Set title bold
+
+% Set title bold
 \pretitle{\begin{center}\bfseries\fontsize{18bp}{18bp}\selectfont}
+
 \makeatletter
 \newcommand{\BvrSubtitle}[1]{%
   \posttitle{%
@@ -43,380 +43,247 @@
 \BvrSetLabInstructor{Dr. Jeelani}
 
 \BvrSubtitle{%
-  Project Proposal for UCS503P  \\
-  Submitted to: \BvrLabInstructorValue \\ \bfseries
-  Thapar Institute of Engineering and Technology%
+  Project Proposal for UCS503P\\
+  Submitted to: \BvrLabInstructorValue\\
+  \bfseries Thapar Institute of Engineering and Technology%
 }
 
 \author{
   Yashit Arora, CSED%
-  \thanks{Roll No: \texttt{1024160006}, %
-    Email: \texttt{yarora1\_be24\@thapar.edu}}
+  \thanks{Roll No: \texttt{1024160006}, Email: \texttt{yarora1\_be24@thapar.edu}}
   \and
   Aarushi Gahlawat, CSED%
-  \thanks{Roll No: \texttt{1024160008}, %
-    Email: \texttt{agahlawat\_be24\@thapar.edu}}
+  \thanks{Roll No: \texttt{1024160008}, Email: \texttt{agahlawat\_be24@thapar.edu}}
 }
 
 \date{\today}
 
 \begin{document}
+
 \maketitle
 
 \section{Higher-order goal%
   \BvrHint{\ldots data-driven electricity monitoring}}
 
-This project aims to make smart-meter data easier to analyse and use.
-The system will help identify meters whose electricity consumption
-looks unusual and will also provide short-term load forecasts.
+MeterIQ aims to make smart-meter data easier to analyse and use.
+The system will identify unusual consumption behaviour and provide
+short-term load forecasts.
 
-We will work with smart-meter datasets from Mathura and Bareilly. The
-main idea is to bring anomaly detection and load forecasting together
-in one platform. A user should be able to search for a meter, look at
-its consumption pattern, understand why it may have been flagged, and
-see its expected future load.
+We will work with smart-meter datasets from Mathura and Bareilly.
+The main goal is to bring anomaly detection and load forecasting
+together in one platform so that a user can view a meter's
+consumption, investigate unusual behaviour and see its expected
+future load.
 
 \section{Time-to-value %
   \BvrHint{\ldots primary heuristic}}
 
 \begin{itemize}[leftmargin=0.7cm]
-    \item We will first inspect the Mathura and Bareilly datasets to
-    understand the available meter, time and energy-related fields
-    before deciding which features and models can be used.
 
-    \item We will then clean the data and prepare the features needed
-    for anomaly detection and short-term load forecasting.
+    \item Understand and clean the Mathura and Bareilly datasets.
 
-    \item Simple baseline approaches will be developed first. This
-    will give us a reference point before trying more advanced models.
+    \item Build simple baselines for anomaly detection and load
+    forecasting.
 
-    \item After the ML part is working, we will connect it with the
-    backend, data storage and dashboard so that the results can be
-    viewed through one application.
+    \item Compare suitable ML approaches using the prepared data.
 
-    \item Git and GitHub will be used throughout the project so that
-    changes can be tracked and the work can be developed in smaller
-    steps.
+    \item Connect the analysis with a backend, data storage and
+    dashboard.
+
+    \item Use Git and GitHub to track development.
+
 \end{itemize}
 
 \section{Problem Statement}
 
-Electricity distribution companies collect large amounts of data from
-smart meters, but raw meter readings by themselves are difficult to
-use for regular monitoring. A meter may show a sudden increase or
-decrease in consumption for many different reasons, and it is not
-practical to manually inspect every reading.
+Smart meters generate a large amount of electricity data, but
+manually checking this data for unusual behaviour is difficult.
+Sudden changes in consumption may have different causes, and it is
+not practical to inspect every reading individually.
 
-The available datasets contain timestamped electricity consumption
-along with electrical measurements such as average voltage, average
-current and frequency. The data comes from smart meters located in
-Mathura and Bareilly and contains readings at a fine time resolution.
+The available datasets contain timestamped consumption along with
+measurements such as voltage, current and frequency. The project
+aims to use these readings to identify unusual patterns and forecast
+future load in a way that is easier for a user to understand.
 
-The problem addressed by this project is to build a practical system
-that can analyse these readings, identify unusual behaviour and
-forecast future load. The system should also present the results in a
-form that is easier for a user to understand.
-
-A major concern is that an anomaly should not automatically be
-labelled as electricity theft. The system therefore focuses on
-identifying unusual behaviour and providing supporting information
-for further investigation rather than making an unsupported theft
-claim.
+An anomaly will be treated as a signal for further investigation,
+not as automatic proof of electricity theft.
 
 \section{Proposed Solution %
   \BvrHint{\ldots Software Proposition}}
 
 \subsection{Overview}
 
-We propose a web-based platform called the \textbf{MeterIQ:
-Explainable Smart Meter Analytics Platform}. The platform will have
-two main parts.
+MeterIQ will be developed as a web-based smart-meter analytics
+platform with two main functions: anomaly detection and short-term
+load forecasting.
 
-The first part will focus on \textbf{anomaly and theft-risk
-detection}. It will study the past consumption behaviour of a meter
-and identify patterns that look unusual. The output can be shown as
-Normal, Suspicious or High-Risk, along with information that helps
-explain the alert.
+The anomaly module will identify unusual meter behaviour and provide
+an anomaly or risk indication. The forecasting module will estimate
+future electricity consumption from historical readings.
 
-The second part will focus on \textbf{short-term load forecasting}.
-The system will use previous consumption data to predict future load.
-The forecast results can then be shown along with the historical
-consumption of the meter.
-
-Both parts will be connected to the same application. The user will
-not have to work with separate notebooks to see the anomaly and
-forecasting results.
+Both results will be available through the same application instead
+of being handled as separate analysis notebooks.
 
 \subsection{Core workflow}
 
 \begin{enumerate}[leftmargin=0.7cm]
-    \item Smart-meter data from the available datasets is loaded into
-    the system.
 
-    \item The data is checked for missing values, duplicates, invalid
-    readings, timestamps and sampling issues.
+    \item Load and inspect the smart-meter data.
 
-    \item The cleaned data is prepared for analysis and suitable
-    features are created based on the actual fields available.
+    \item Clean the data and prepare useful features.
 
-    \item The processed data is given to the anomaly detection and
-    load forecasting modules.
+    \item Run anomaly detection and load forecasting.
 
-    \item The anomaly module produces an anomaly score or flag for
-    unusual meter behaviour.
+    \item Store and expose the results through the application.
 
-    \item The forecasting module produces future load predictions.
+    \item Allow the user to search for a meter and view its history,
+    alerts and forecast.
 
-    \item The results are made available through the backend and data
-    storage layer.
-
-    \item The dashboard allows the user to search for a meter, view
-    its consumption history, check its risk level, understand the
-    alert and view the forecast.
 \end{enumerate}
 
 \subsection{Operational constraints for an educational Software Engineering project}
 
 \begin{itemize}[leftmargin=0.7cm]
-    \item The system should remain simple enough to develop and test
-    within the project timeline.
 
-    \item The actual Mathura and Bareilly datasets will be inspected
-    before deciding which features can be used. We will not assume
-    that a feature exists if it is not present in the data.
+    \item The actual dataset will be studied before selecting
+    features and models.
 
-    \item Forecasting models will be evaluated using chronological
-    splits so that future information does not accidentally enter the
-    training data.
+    \item Chronological splits will be used for forecasting to avoid
+    data leakage.
 
-    \item An anomaly will be treated as an indicator for investigation
-    and not as proof of electricity theft.
+    \item Anomaly results will be treated as investigation
+    indicators.
 
-    \item The frontend, backend, data storage and ML parts should be
-    kept separate enough that they can be developed and tested
-    independently.
+    \item The system will be developed in separate modules so that
+    the parts can be tested independently.
+
 \end{itemize}
 
 \section{Solution Approach %
   \BvrHint{\ldots Engineering focus}}
 
-The project will combine data analysis, machine learning and normal
-software development. We will first understand the data and build
-the ML components, and then connect them to the backend, data storage
-and frontend.
+The project will follow a simple workflow: understand the data,
+prepare it, build the ML components and then connect them to the
+application.
 
 \subsection{Data understanding and preprocessing %
   \BvrHint{\ldots data quality}}
 
-The Mathura and Bareilly datasets will first be inspected separately.
-The available smart-meter data includes timestamp, energy
-consumption, average voltage, average current, frequency and meter
-identifier.
+The Mathura and Bareilly datasets will be inspected separately. The
+available data includes timestamp, energy consumption, average
+voltage, average current, frequency and meter information.
 
-The preprocessing stage will include timestamp conversion, checking
-the sampling interval, identifying missing values and duplicate
-records, checking unusual electrical readings, and validating
-meter-wise data coverage.
-
-Time-based features such as hour, day, weekday and month will be
-created where useful. Lag and rolling features may also be generated
-for forecasting, while ensuring that they use only information that
-would have been available at prediction time.
+Preprocessing will include timestamp handling, checking missing and
+duplicate records, checking unusual values and validating meter-wise
+data. Time-based, lag and rolling features will be created where
+useful.
 
 \subsection{Anomaly and risk detection %
   \BvrHint{\ldots ML component}}
 
-The anomaly detection module will focus on finding unusual
-consumption behaviour rather than directly classifying a reading as
-electricity theft.
+The anomaly module will look for consumption behaviour that differs
+from a meter's usual pattern. Voltage, current, frequency and
+time-based information may also be considered.
 
-The analysis will consider changes in energy consumption together
-with contextual variables such as voltage, current, frequency and
-time of day. Meter-level behaviour will also be considered because
-a pattern that is normal for one meter may be unusual for another.
+Models such as Isolation Forest and Local Outlier Factor will be
+compared. The final approach will be selected after testing it on
+the available data.
 
-Candidate unsupervised techniques such as Isolation Forest and Local
-Outlier Factor will be evaluated. The final method will be selected
-after comparing the stability and usefulness of the detected
-anomalies on the available data.
-
-The output will include an anomaly score or flag together with the
-timestamp and supporting information that can help a user understand
-why the reading was considered unusual.
-
-The system will clearly distinguish between an ML-generated anomaly
-and a confirmed theft case. A flagged reading will only indicate
-that further investigation may be useful.
+The output will include an anomaly indication and supporting
+information so that the user can understand why a reading was
+flagged.
 
 \subsection{Short-term load forecasting %
   \BvrHint{\ldots forecasting component}}
 
-The forecasting module will estimate future electricity consumption
-from historical meter behaviour.
+The forecasting module will use historical consumption to estimate
+future load. A simple historical baseline will be used first and
+then compared with ML models such as Linear Regression and Random
+Forest.
 
-The project will first establish a simple baseline using previous
-historical observations. More advanced machine learning models will
-then be compared against this baseline.
-
-Potential features include recent consumption values, lagged
-consumption, rolling statistics and calendar information such as
-hour, weekday and month. Electrical variables such as voltage,
-current and frequency will be considered where they are available
-and useful.
-
-Candidate models will include Linear Regression, Random Forest and
-gradient-boosting based models. The final model will be selected
-based on performance on a chronological test period rather than a
-random train-test split.
-
-The main evaluation measures will be MAE, RMSE and MAPE. R-squared
-may also be reported where it provides useful information about the
-model.
+Lagged consumption, rolling statistics and calendar features will be
+considered. Models will be evaluated using MAE, RMSE and MAPE on a
+chronological test period.
 
 \subsection{Explainability %
   \BvrHint{\ldots understandable results}}
 
-Explainability is an important part of MeterIQ because the purpose
-of the system is not only to produce an anomaly flag but also to
-make the result understandable.
+MeterIQ will show more than an anomaly flag. For a flagged reading,
+the user will be able to see the consumption pattern and relevant
+changes that contributed to the alert.
 
-For each flagged observation, the system will present information
-such as the observed consumption, recent historical behaviour,
-deviation from normal patterns and relevant electrical measurements.
-
-The interface will distinguish between what the model directly
-predicts, what is calculated from the data and what is interpreted
-by the user. This avoids presenting a possible explanation as a
-confirmed cause when the available data cannot support such a
-conclusion.
+The system will clearly separate model output from the information
+calculated from the data so that an anomaly is not presented as a
+confirmed cause.
 
 \subsection{Web architecture %
   \BvrHint{\ldots web-based solution}}
 
-The application will follow a simple full-stack structure.
+The application will have a web-based frontend, a backend layer,
+data-processing and ML components, and a suitable data-storage
+solution.
 
-\begin{itemize}[leftmargin=0.7cm]
-    \item \textbf{Frontend:} A web-based interface will be developed
-    to display consumption, anomaly and forecasting results.
-
-    \item \textbf{Backend API:} A backend layer will connect the
-    frontend with the data processing and machine learning
-    components.
-
-    \item \textbf{Data and ML layer:} Python, Pandas, NumPy and
-    Scikit-learn will be used for data processing and machine
-    learning.
-
-    \item \textbf{Database:} A suitable database will be used to
-    store meter information, processed results and application data.
-
-    \item \textbf{Version control:} Git and GitHub will be used to
-    keep the project organised and track changes.
-\end{itemize}
+Python, Pandas, NumPy and Scikit-learn will be used for the data and
+ML work. Git and GitHub will be used for version control.
 
 \subsection{CI/CD and fast delivery enabler}
 
-GitHub will be used throughout development. As the project develops,
-we plan to add automated testing and build checks so that changes can
-be checked before they are merged or deployed.
-
-The CI/CD setup will help us to:
-
-\begin{itemize}[leftmargin=0.7cm]
-    \item run tests automatically after changes;
-    \item check that the application still builds correctly;
-    \item keep deployment steps repeatable; and
-    \item make it easier to add new features without breaking the
-    existing system.
-\end{itemize}
+GitHub will be used throughout development. Automated testing and
+basic build checks can be added as the application develops to make
+changes easier to test and manage.
 
 \section{Evaluation Criterion %
   \BvrHint{\ldots measurable and attributable}}
 
-The project will be evaluated using both ML results and the
-performance of the software system. We will not claim model
-performance before the experiments are actually completed.
-
 \subsection{Primary evaluation metric}
 
-For load forecasting, the main metrics will be:
+For load forecasting, the main evaluation metrics will be:
 
 \begin{itemize}[leftmargin=0.7cm]
-    \item \textbf{Mean Absolute Error (MAE):} average absolute
-    difference between predicted and actual load.
 
-    \item \textbf{Root Mean Squared Error (RMSE):} gives more weight
-    to larger forecasting errors.
+    \item Mean Absolute Error (MAE)
 
-    \item \textbf{Mean Absolute Percentage Error (MAPE):} measures
-    forecasting error relative to the actual value when suitable
-    for the data.
+    \item Root Mean Squared Error (RMSE)
 
-    \item \textbf{R$^2$:} may be used as an additional measure where
-    appropriate.
+    \item Mean Absolute Percentage Error (MAPE)
+
 \end{itemize}
 
-For anomaly detection, evaluation will focus on the quality and
-usefulness of the detected patterns because confirmed theft labels
-are not assumed to be available in the supplied datasets.
+For anomaly detection, the detected patterns will be checked for
+consistency and usefulness. Confirmed theft labels will not be
+assumed unless they are available in the data.
 
 \subsection{Secondary evaluation metrics}
 
-The software system will also be checked for:
-
-\begin{itemize}[leftmargin=0.7cm]
-    \item correct API responses;
-    \item correct retrieval of meter data;
-    \item correct display of anomaly and forecast results;
-    \item data storage consistency;
-    \item response time where measurable;
-    \item integration between the ML and web application layers; and
-    \item reliability of the main user workflows.
-\end{itemize}
+The application will also be checked for correct data retrieval,
+working API calls, correct display of results, basic response time
+and integration between the ML and application components.
 
 \subsection{Pilot validation plan %
   \BvrHint{\ldots high-level}}
 
-The forecasting models will be evaluated using chronological
-validation so that the model is tested on future observations
-relative to its training data.
+Forecasting models will be tested chronologically so that future
+information is not used during training. Different models will be
+compared using the same evaluation period.
 
-Different forecasting models will be compared using the same
-evaluation period. For anomaly detection, the detected patterns
-will be inspected at meter level and compared with historical
-behaviour to determine whether the results are meaningful and
-stable.
-
-Any data leakage discovered during development will be corrected
-before the final model comparison.
+Anomaly results will be inspected at the meter level and compared
+with historical behaviour.
 
 \section{Scalability %
   \BvrHint{\ldots with foresight}}
 
-The initial analysis will use the supplied Mathura and Bareilly
-datasets. The software architecture will be designed so that
-additional meters and future readings can be added later without
-changing the complete application structure.
-
-The data storage and application layers will remain separate from
-the model code, making it possible to update or retrain models as
+The system will be designed so that additional meters and future
+readings can be added later. Keeping the data, ML and application
+parts separate will also make it easier to update the models when
 more data becomes available.
-
-Future versions may support automated ingestion of new smart-meter
-readings and periodic model updates.
 
 \section{Engine availability heuristic}
 
-The availability of a meter for analysis will be assessed using the
-completeness and continuity of its recorded observations.
-
-A meter with large gaps in its readings may provide less reliable
-input for forecasting and anomaly detection. Therefore, data
-availability checks will be performed before using a meter for model
-training or detailed investigation.
-
-This measure will be treated as a data-quality indicator and not as
-a measure of the physical health of the meter.
+The availability of a meter will be checked using the completeness
+and continuity of its readings. Large gaps in the data may affect
+forecasting and anomaly analysis, so data availability will be
+considered before using a meter for detailed analysis.
 
 \section{Project scope and deliverables %
   \BvrHint{\ldots iteration-friendly}}
@@ -424,84 +291,71 @@ a measure of the physical health of the meter.
 \subsection{Initial deliverable %
   \BvrHint{\ldots first iteration}}
 
-The initial deliverable will be a cleaned and documented version of
-the supplied Mathura and Bareilly smart-meter data together with
-exploratory analysis of consumption and electrical behaviour.
-
-This stage will establish the data quality, time coverage,
-meter-wise behaviour and useful features required for the
-subsequent modelling stages.
+The first deliverable will be a cleaned and documented version of
+the Mathura and Bareilly data with exploratory analysis of
+consumption and electrical behaviour.
 
 \subsection{Subsequent deliverables}
 
 \begin{itemize}[leftmargin=0.7cm]
-    \item A preprocessing and feature-engineering pipeline.
-    \item An anomaly detection module for identifying unusual meter
-    behaviour.
-    \item A short-term load forecasting module.
-    \item Evaluation and comparison of candidate models.
-    \item An explainability layer for anomaly investigation.
-    \item A backend API connecting the analytical modules with the
-    application.
-    \item A suitable data storage layer for meter, anomaly and
-    forecast information.
-    \item A web dashboard for viewing and investigating results.
-    \item Documentation and testing of the complete system.
+
+    \item Data preprocessing and feature engineering pipeline.
+
+    \item Anomaly detection module.
+
+    \item Short-term load forecasting module.
+
+    \item Model evaluation and comparison.
+
+    \item Explainability for anomaly results.
+
+    \item Backend and data-storage integration.
+
+    \item Web dashboard for meter analysis.
+
+    \item Testing and project documentation.
+
 \end{itemize}
 
 \section{Risks and mitigations}
 
 \begin{itemize}[leftmargin=0.7cm]
 
-    \item \textbf{Missing or inconsistent readings:} data-quality
-    checks and preprocessing will be performed before modelling.
+    \item \textbf{Data quality:} missing, duplicate or unusual
+    readings will be checked during preprocessing.
 
-    \item \textbf{Different behaviour between meters:} the analysis
-    will consider meter-level patterns instead of assuming that all
-    meters behave in the same way.
+    \item \textbf{Different meter behaviour:} analysis will consider
+    meter-level patterns instead of assuming all meters behave the
+    same way.
 
-    \item \textbf{False anomaly detection:} different approaches
-    will be compared and flagged observations will be treated as
-    investigation signals rather than confirmed theft.
+    \item \textbf{False anomalies:} flagged readings will be treated
+    as investigation signals rather than confirmed theft.
 
-    \item \textbf{Data leakage:} features will be generated using
-    only information available before the prediction time, and
-    chronological validation will be used.
+    \item \textbf{Data leakage:} chronological validation and
+    carefully created lag features will be used.
 
-    \item \textbf{Model overfitting:} models will be compared on a
-    separate chronological evaluation period.
+    \item \textbf{Model selection:} simple baselines will be compared
+    with ML models before choosing the final approach.
 
-    \item \textbf{Limited ground truth for theft:} the project will
-    avoid claiming confirmed theft detection when reliable labels
-    are unavailable.
+    \item \textbf{System integration:} the ML, backend and frontend
+    components will be developed separately and integrated step by
+    step.
 
-    \item \textbf{System integration:} the frontend, backend, data
-    storage and ML components will be developed as separate modules
-    and tested before final integration.
 \end{itemize}
 
 \section{Summary}
 
-MeterIQ aims to provide a practical way of working with smart-meter
-data from Mathura and Bareilly.
+MeterIQ will analyse smart-meter data from Mathura and Bareilly using
+two connected components: anomaly detection and short-term load
+forecasting.
 
-The project starts with understanding and cleaning the available
-meter readings and then builds two connected analytical components:
-anomaly detection and short-term load forecasting. The anomaly
-module is intended to highlight unusual behaviour, while the
-forecasting module provides an estimate of expected future
-consumption.
+The system will help a user view meter consumption, identify unusual
+behaviour and understand the information behind an alert. It will
+also provide future load estimates based on historical readings.
 
-The important part of the project is the connection between these
-results. Instead of showing an anomaly flag alone, MeterIQ will
-allow a user to look at the meter's historical behaviour, understand
-the context of the unusual reading and compare it with expected load
-behaviour.
-
-The final system will combine the data pipeline, machine learning
-models, data storage, backend APIs and web dashboard into one
-application. The project will focus on producing useful and
-explainable results while avoiding unsupported claims about
-electricity theft.
+The final project will combine the data pipeline, ML models and
+web-based application into one system. The focus will be on useful
+and understandable results rather than making unsupported claims
+about electricity theft.
 
 \end{document}
