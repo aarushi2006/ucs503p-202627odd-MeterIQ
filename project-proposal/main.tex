@@ -38,24 +38,24 @@
 
 % -----------------------------------------------------
 
-\title{Grievance-Resolution System for a Tier-2/3 City}
+\title{MeterIQ: Explainable Smart Meter Analytics Platform}
 
-\BvrSetLabInstructor{Dr. Raghav B. Venkataramaiyer}
+\BvrSetLabInstructor{Dr. Jeelani}
 
 \BvrSubtitle{%
   Project Proposal for UCS503P  \\
   Submitted to: \BvrLabInstructorValue \\ \bfseries
-  Thapar Institute of Engineering and Technology% 
+  Thapar Institute of Engineering and Technology%
 }
 
 \author{
-  Vidya Vaidyanathan, CSED%
-  \thanks{Roll No: \texttt{1024030xxx}, %
-    Email: \texttt{vvaidhanathan\_be24\@thapar.edu}}
-  \and 
-  Bhanurekha Ganesan, CSED%
-  \thanks{Roll No: \texttt{1024030xxx}, %
-    Email: \texttt{bganesan\_be24\@thapar.edu}}
+  Yashit Arora, CSED%
+  \thanks{Roll No: \texttt{1024160006}, %
+    Email: \texttt{yarora1\_be24\@thapar.edu}}
+  \and
+  Aarushi Gahlawat, CSED%
+  \thanks{Roll No: \texttt{1024160008}, %
+    Email: \texttt{agahlawat\_be24\@thapar.edu}}
 }
 
 \date{\today}
@@ -64,179 +64,445 @@
 \maketitle
 
 \section{Higher-order goal%
-  \BvrHint{\ldots secondary framing}}
-This project aims to improve sustainable urban
-governance by reducing the time and effort required to
-resolve citizen issues. While the topic is broader than
-any single municipality, the immediate engineering
-objective is to translate \emph{efficient public
-  service delivery} into a measurable, deployable
-software solution.
+  \BvrHint{\ldots data-driven electricity monitoring}}
+
+This project aims to make smart-meter data easier to analyse and use.
+The system will help identify meters whose electricity consumption
+looks unusual and will also provide short-term load forecasts.
+
+We will work with smart-meter datasets from Mathura and Bareilly. The
+main idea is to bring anomaly detection and load forecasting together
+in one platform. A user should be able to search for a meter, look at
+its consumption pattern, understand why it may have been flagged, and
+see its expected future load.
 
 \section{Time-to-value %
-\BvrHint{\ldots primary heuristic}}
+  \BvrHint{\ldots primary heuristic}}
+
 \begin{itemize}[leftmargin=0.7cm]
-    \item We will deliver meaningful increments quickly by prototyping the core user workflow and validating it with users within a short iteration window.
-    \item We will prioritize fast feedback over perfection by using weekly iterations (and targeting CI-backed automation early) to reduce release friction.
-    \item Success is defined by what can be delivered and measured in the first iteration, then improved based on user feedback.
+    \item We will first inspect the Mathura and Bareilly datasets to
+    understand the available meter, time and energy-related fields
+    before deciding which features and models can be used.
+
+    \item We will then clean the data and prepare the features needed
+    for anomaly detection and short-term load forecasting.
+
+    \item Simple baseline approaches will be developed first. This
+    will give us a reference point before trying more advanced models.
+
+    \item After the ML part is working, we will connect it with the
+    backend, database and dashboard so that the results can be viewed
+    through one application.
+
+    \item Git and GitHub will be used throughout the project so that
+    changes can be tracked and the work can be developed in smaller
+    steps.
 \end{itemize}
 
 \section{Problem Statement}
-Citizens in a tier-2/3 Indian city face delays and uncertainty when reporting local issues (e.g., streetlight outages, water leakage, garbage accumulation, road potholes). Common pain points include:
-\begin{itemize}[leftmargin=0.7cm]
-    \item \textbf{Fragmentation:} complaints are often made via multiple channels (calls, social media, paper forms), causing lost context.
-    \item \textbf{Low transparency:} citizens cannot easily see the status of their complaint (e.g., ``received'', ``assigned'', ``in progress'', ``resolved'').
-    \item \textbf{Slow coordination:} departments/field teams lack a unified, trackable workflow with clear ownership.
-    \item \textbf{Poor data quality:} duplicate or incomplete reports force rework and extend resolution time.
-\end{itemize}
 
-\textbf{Why this matters now (contextual relevance):} In an urban setting with limited staff bandwidth, even small process improvements can noticeably reduce resolution delays and repeated submissions.
+Electricity distribution companies collect large amounts of data from
+smart meters, but raw meter readings by themselves are difficult to
+use for regular monitoring. A meter may show a sudden increase or
+decrease in consumption for many different reasons, and it is not
+practical to manually inspect every reading.
+
+The available datasets contain timestamped electricity consumption
+along with electrical measurements such as average voltage, average
+current and frequency. The data comes from smart meters located in
+Mathura and Bareilly and contains readings at a fine time resolution.
+
+The problem addressed by this project is to build a practical system
+that can analyse these readings, identify unusual behaviour and
+forecast future load. The system should also present the results in a
+form that is easier for a user to understand.
+
+A major concern is that an anomaly should not automatically be
+labelled as electricity theft. The system therefore focuses on
+identifying unusual behaviour and providing supporting information
+for further investigation rather than making an unsupported theft
+claim.
 
 \section{Proposed Solution %
-\BvrHint{\ldots Software Proposition}}
+  \BvrHint{\ldots Software Proposition}}
+
 \subsection{Overview}
-Build a \textbf{web-based} ``Grievance-to-Resolution'' system with the following components:
-\begin{itemize}[leftmargin=0.7cm]
-    \item \textbf{Citizen submission portal:} users submit an issue with photo (optional), category, and locality/ward.
-    \item \textbf{Automated triage:} basic duplicate detection and completeness checks.
-    \item \textbf{Department workflow:} assign issues to relevant department/team and update statuses.
-    \item \textbf{Status transparency:} citizens track status and receive notifications when resolved.
-    \item \textbf{Admin/ops dashboard:} performance summaries (resolution time, backlog).
-\end{itemize}
+
+We propose a web-based platform called the \textbf{MeterIQ:
+Explainable Smart Meter Analytics Platform}. The platform will have
+two main parts.
+
+The first part will focus on \textbf{anomaly and theft-risk
+detection}. It will study the past consumption behaviour of a meter
+and identify patterns that look unusual. The output can be shown as
+Normal, Suspicious or High-Risk, along with information that helps
+explain the alert.
+
+The second part will focus on \textbf{short-term load forecasting}.
+The system will use previous consumption data to predict future load.
+The forecast results can then be shown along with the historical
+consumption of the meter.
+
+Both parts will be connected to the same application. The user will
+not have to work with separate notebooks to see the anomaly and
+forecasting results.
 
 \subsection{Core workflow}
+
 \begin{enumerate}[leftmargin=0.7cm]
-    \item Citizen creates a complaint and receives a complaint ID immediately.
-    \item System validates completeness and suggests possible duplicates (lightweight similarity on text/category and approximate location).
-    \item Department staff update status (Received $\rightarrow$ Assigned $\rightarrow$ In Progress $\rightarrow$ Resolved).
-    \item Citizen views status updates and resolution notes.
+    \item Smart-meter data from the available datasets is loaded into
+    the system.
+
+    \item The data is checked for missing values, duplicates, invalid
+    readings, timestamps and sampling issues.
+
+    \item The cleaned data is prepared for analysis and suitable
+    features are created based on the actual fields available.
+
+    \item The processed data is given to the anomaly detection and
+    load forecasting modules.
+
+    \item The anomaly module produces an anomaly score or flag for
+    unusual meter behaviour.
+
+    \item The forecasting module produces future load predictions.
+
+    \item The results are made available through the backend and
+    database.
+
+    \item The dashboard allows the user to search for a meter, view
+    its consumption history, check its risk level, understand the
+    alert and view the forecast.
 \end{enumerate}
 
-\subsection{Operational constraints for an educational, tier-2/3 setting}
+\subsection{Operational constraints for an educational Software Engineering project}
+
 \begin{itemize}[leftmargin=0.7cm]
-    \item Keep the solution usable on low-to-mid range devices via responsive web design.
-    \item Avoid dependence on advanced research algorithms; focus on workflow, automation, and system correctness.
-    \item Design for deployability using common web hosting and managed databases.
+    \item The system should remain simple enough to develop and test
+    within the project timeline.
+
+    \item The actual Mathura and Bareilly datasets will be inspected
+    before deciding which features can be used. We will not assume
+    that a feature exists if it is not present in the data.
+
+    \item Forecasting models will be evaluated using chronological
+    splits so that future information does not accidentally enter the
+    training data.
+
+    \item An anomaly will be treated as an indicator for investigation
+    and not as proof of electricity theft.
+
+    \item The frontend, backend, database and ML parts should be kept
+    separate enough that they can be developed and tested
+    independently.
 \end{itemize}
 
 \section{Solution Approach %
-\BvrHint{\ldots Engineering focus}}
-This is an engineering course project, so we focus on scalable administrative and workflow aspects rather than novel algorithm research.
+  \BvrHint{\ldots Engineering focus}}
 
-\subsection{Duplicate/quality assistance %
-\BvrHint{\ldots non-research}}
-Duplicate detection will be heuristic-based:
-\begin{itemize}[leftmargin=0.7cm]
-    \item Normalize text (category + short description keywords).
-    \item Use a simple similarity measure (e.g., token overlap / TF-IDF cosine with threshold) without claiming state-of-the-art.
-    \item Show top candidate duplicates to staff for decision; never fully auto-delete or auto-reject.
-\end{itemize}
+The project will combine data analysis, machine learning and normal
+software development. We will first understand the data and build
+the ML components, and then connect them to the backend, database
+and frontend.
+
+\subsection{Data understanding and preprocessing %
+  \BvrHint{\ldots data quality}}
+
+The Mathura and Bareilly datasets will first be inspected separately.
+The available smart-meter data includes timestamp, energy
+consumption, average voltage, average current, frequency and meter
+identifier.
+
+The preprocessing stage will include timestamp conversion, checking
+the sampling interval, identifying missing values and duplicate
+records, checking unusual electrical readings, and validating
+meter-wise data coverage.
+
+Time-based features such as hour, day, weekday and month will be
+created where useful. Lag and rolling features may also be generated
+for forecasting, while ensuring that they use only information that
+would have been available at prediction time.
+
+\subsection{Anomaly and risk detection %
+  \BvrHint{\ldots ML component}}
+
+The anomaly detection module will focus on finding unusual
+consumption behaviour rather than directly classifying a reading as
+electricity theft.
+
+The analysis will consider changes in energy consumption together
+with contextual variables such as voltage, current, frequency and
+time of day. Meter-level behaviour will also be considered because
+a pattern that is normal for one meter may be unusual for another.
+
+Candidate unsupervised techniques such as Isolation Forest and Local
+Outlier Factor will be evaluated. The final method will be selected
+after comparing the stability and usefulness of the detected
+anomalies on the available data.
+
+The output will include an anomaly score or flag together with the
+timestamp and supporting information that can help a user understand
+why the reading was considered unusual.
+
+The system will clearly distinguish between an ML-generated anomaly
+and a confirmed theft case. A flagged reading will only indicate
+that further investigation may be useful.
+
+\subsection{Short-term load forecasting %
+  \BvrHint{\ldots forecasting component}}
+
+The forecasting module will estimate future electricity consumption
+from historical meter behaviour.
+
+The project will first establish a simple baseline using previous
+historical observations. More advanced machine learning models will
+then be compared against this baseline.
+
+Potential features include recent consumption values, lagged
+consumption, rolling statistics and calendar information such as
+hour, weekday and month. Electrical variables such as voltage,
+current and frequency will be considered where they are available
+and useful.
+
+Candidate models will include Linear Regression, Random Forest and
+gradient-boosting based models. The final model will be selected
+based on performance on a chronological test period rather than a
+random train-test split.
+
+The main evaluation measures will be MAE, RMSE and MAPE. R-squared
+may also be reported where it provides useful information about the
+model.
+
+\subsection{Explainability %
+  \BvrHint{\ldots understandable results}}
+
+Explainability is an important part of MeterIQ because the purpose
+of the system is not only to produce an anomaly flag but also to
+make the result understandable.
+
+For each flagged observation, the system will present information
+such as the observed consumption, recent historical behaviour,
+deviation from normal patterns and relevant electrical measurements.
+
+The interface will distinguish between what the model directly
+predicts, what is calculated from the data and what is interpreted
+by the user. This avoids presenting a possible explanation as a
+confirmed cause when the available data cannot support such a
+conclusion.
 
 \subsection{Web architecture %
-\BvrHint{\ldots web-based solution}}
-A typical 3-tier web architecture:
+  \BvrHint{\ldots web-based solution}}
+
+The application will follow a simple full-stack structure.
+
 \begin{itemize}[leftmargin=0.7cm]
-    \item \textbf{Frontend:} responsive UI for citizens and staff (status pages, submission form, dashboard).
-    \item \textbf{Backend API:} authentication, complaint submission, status transitions, assignment logic.
-    \item \textbf{Database:} store users, complaints, status history, attachments metadata.
+    \item \textbf{Frontend:} React.js with HTML and CSS. A charting
+    library can be used to display consumption, anomaly and
+    forecasting results.
+
+    \item \textbf{Backend API:} Flask or FastAPI will be used to
+    provide APIs for meter information, anomaly results, forecasts
+    and dashboard data.
+
+    \item \textbf{Data and ML layer:} Python, Pandas, NumPy and
+    Scikit-learn will be used for data processing and machine
+    learning.
+
+    \item \textbf{Database:} PostgreSQL will be used to store
+    application data and the results needed by the dashboard.
+
+    \item \textbf{Version control:} Git and GitHub will be used to
+    keep the project organised and track changes.
 \end{itemize}
 
 \subsection{CI/CD and fast delivery enabler}
-CI/CD will be used to:
+
+GitHub will be used throughout development. As the project develops,
+we plan to add automated testing and build checks so that changes can
+be checked before they are merged or deployed.
+
+The CI/CD setup will help us to:
+
 \begin{itemize}[leftmargin=0.7cm]
-    \item Automatically build and run tests on every change.
-    \item Produce repeatable deployment artifacts to staging.
-    \item Enable safe and frequent releases of incremental features.
+    \item run tests automatically after changes;
+    \item check that the application still builds correctly;
+    \item keep deployment steps repeatable; and
+    \item make it easier to add new features without breaking the
+    existing system.
 \end{itemize}
 
 \section{Evaluation Criterion %
-\BvrHint{\ldots measurable and attributable}}
-We define success using measurable metrics tied to the core workflow.
+  \BvrHint{\ldots measurable and attributable}}
+
+The project will be evaluated using both ML results and the
+performance of the software system. We will not claim model
+performance before the experiments are actually completed.
 
 \subsection{Primary evaluation metric}
-\textbf{Time-to-acknowledgement (TTA):} time between complaint submission and ``Received/Assigned'' status creation in the system.
+
+For load forecasting, the main metrics will be:
+
 \begin{itemize}[leftmargin=0.7cm]
-    \item Target: median TTA $\le$ 2 hours during pilot window.
-    \item Attribution: measured from database timestamps (submission vs. first status update by staff).
+    \item \textbf{Mean Absolute Error (MAE):} average absolute
+    difference between predicted and actual load.
+
+    \item \textbf{Root Mean Squared Error (RMSE):} gives more weight
+    to larger forecasting errors.
+
+    \item \textbf{Mean Absolute Percentage Error (MAPE):} measures
+    forecasting error relative to the actual value when suitable
+    for the data.
+
+    \item \textbf{R$^2$:} may be used as an additional measure where
+    appropriate.
 \end{itemize}
 
+For anomaly detection, evaluation will focus on the quality and
+usefulness of the detected patterns because confirmed theft labels
+are not assumed to be available in the supplied datasets.
+
 \subsection{Secondary evaluation metrics}
+
+The software system will also be checked for:
+
 \begin{itemize}[leftmargin=0.7cm]
-    \item \textbf{Resolution time reduction:} reduce time-to-resolved compared to baseline process (even if baseline is collected via survey).
-    \item \textbf{Duplicate rate:} percentage of complaints flagged as duplicates and resolved without rework.
-    \item \textbf{User clarity:} citizen-reported clarity of status using a simple 1--5 feedback question.
-    \item \textbf{Reliability:} availability of staging/production for login and submission during business hours (e.g., $\ge$ 99\% uptime in pilot).
+    \item correct API responses;
+    \item correct retrieval of meter data;
+    \item correct display of anomaly and forecast results;
+    \item database consistency;
+    \item response time where measurable;
+    \item integration between the ML and web application layers; and
+    \item reliability of the main user workflows.
 \end{itemize}
 
 \subsection{Pilot validation plan %
-\BvrHint{\ldots high-level}}
-\begin{itemize}[leftmargin=0.7cm]
-    \item Recruit 10--20 pilot users (citizens) and 3--5 staff roles (department simulation if real staff unavailable).
-    \item Compare metrics before/after within the iteration window by logging baseline estimates via short interviews or existing process observations.
-\end{itemize}
+  \BvrHint{\ldots high-level}}
+
+The forecasting models will be evaluated using chronological
+validation so that the model is tested on future observations
+relative to its training data.
+
+Different forecasting models will be compared using the same
+evaluation period. For anomaly detection, the detected patterns
+will be inspected at meter level and compared with historical
+behaviour to determine whether the results are meaningful and
+stable.
+
+Any data leakage discovered during development will be corrected
+before the final model comparison.
 
 \section{Scalability %
-\BvrHint{\ldots with foresight}}
-The proposition should scale in both theoretical and practical senses.
+  \BvrHint{\ldots with foresight}}
 
-\begin{enumerate}[leftmargin=0.7cm]
-    \item \textbf{Scalable (theoretically):} The system should support growth in number of complaints and concurrent dashboard usage by:
-    \begin{itemize}[leftmargin=0.7cm]
-        \item decoupling components (frontend/backend),
-        \item enabling pagination and indexing for common queries,
-        \item using stateless API design.
-    \end{itemize}
-    
-    \item \textbf{Operationally deployable (practically):} The system should run on common web hosting:
-    \begin{itemize}[leftmargin=0.7cm]
-        \item managed database,
-        \item containerized or platform-hosted deployment,
-        \item CI/CD pipeline for staging/production.
-    \end{itemize}
-\end{enumerate}
+The initial analysis will use the supplied Mathura and Bareilly
+datasets. The software architecture will be designed so that
+additional meters and future readings can be added later without
+changing the complete application structure.
+
+The database and API layers will remain separate from the model
+code, making it possible to update or retrain models as more data
+becomes available.
+
+Future versions may support automated ingestion of new smart-meter
+readings and periodic model updates.
 
 \section{Engine availability heuristic}
-A mature set of ``engines'' (tooling/services) is available to implement this as a web-based project:
-\begin{itemize}[leftmargin=0.7cm]
-    \item Web framework for REST APIs and templated/reactive pages.
-    \item Managed relational or document database.
-    \item Authentication approach (token-based or session-based).
-    \item Object storage for optional attachments (or local storage for pilot).
-    \item Test framework for unit/integration tests.
-    \item CI runner and staging deployment target.
-\end{itemize}
-We will use these mature components to focus on workflow design, correctness, and measurement rather than inventing new infrastructure.
+
+The availability of a meter for analysis will be assessed using the
+completeness and continuity of its recorded observations.
+
+A meter with large gaps in its readings may provide less reliable
+input for forecasting and anomaly detection. Therefore, data
+availability checks will be performed before using a meter for model
+training or detailed investigation.
+
+This measure will be treated as a data-quality indicator and not as
+a measure of the physical health of the meter.
 
 \section{Project scope and deliverables %
-\BvrHint{\ldots iteration-friendly}}
+  \BvrHint{\ldots iteration-friendly}}
+
 \subsection{Initial deliverable %
-\BvrHint{\ldots first iteration}}
-\begin{itemize}[leftmargin=0.7cm]
-    \item Citizen submission form + complaint ID generation
-    \item Staff workflow: update status and assignment
-    \item Citizen status page: view timeline/history
-    \item Basic logging and timestamps for TTA measurement
-    \item CI: build + backend unit tests + linting
-    \item CD to staging with a single command or pipeline job
-\end{itemize}
+  \BvrHint{\ldots first iteration}}
+
+The initial deliverable will be a cleaned and documented version of
+the supplied Mathura and Bareilly smart-meter data together with
+exploratory analysis of consumption and electrical behaviour.
+
+This stage will establish the data quality, time coverage,
+meter-wise behaviour and useful features required for the
+subsequent modelling stages.
 
 \subsection{Subsequent deliverables}
+
 \begin{itemize}[leftmargin=0.7cm]
-    \item Lightweight duplicate suggestions with staff review
-    \item Notification layer (email/SMS optional in later iteration; can start with in-app notifications)
-    \item Admin dashboard for metrics and backlog
-    \item Improved search/filtering and indexed queries for scale readiness
+    \item A preprocessing and feature-engineering pipeline.
+    \item An anomaly detection module for identifying unusual meter
+    behaviour.
+    \item A short-term load forecasting module.
+    \item Evaluation and comparison of candidate models.
+    \item An explainability layer for anomaly investigation.
+    \item A backend API connecting the analytical modules with the
+    application.
+    \item A database for storing meter, anomaly and forecast
+    information.
+    \item A web dashboard for viewing and investigating results.
+    \item Documentation and testing of the complete system.
 \end{itemize}
 
 \section{Risks and mitigations}
+
 \begin{itemize}[leftmargin=0.7cm]
-    \item \textbf{Data privacy / consent:} minimize collected data; keep attachments optional; store only what is needed.
-    \item \textbf{Staff adoption:} provide an easy UI for status updates; keep workflow steps minimal; include shortcuts.
-    \item \textbf{Evaluation measurement ambiguity:} instrument timestamps and define clear status transitions before development begins.
-    \item \textbf{Operational issues in pilot:} use staging early; ensure CI/CD produces repeatable deployments.
+
+    \item \textbf{Missing or inconsistent readings:} data-quality
+    checks and preprocessing will be performed before modelling.
+
+    \item \textbf{Different behaviour between meters:} the analysis
+    will consider meter-level patterns instead of assuming that all
+    meters behave in the same way.
+
+    \item \textbf{False anomaly detection:} different approaches
+    will be compared and flagged observations will be treated as
+    investigation signals rather than confirmed theft.
+
+    \item \textbf{Data leakage:} features will be generated using
+    only information available before the prediction time, and
+    chronological validation will be used.
+
+    \item \textbf{Model overfitting:} models will be compared on a
+    separate chronological evaluation period.
+
+    \item \textbf{Limited ground truth for theft:} the project will
+    avoid claiming confirmed theft detection when reliable labels
+    are unavailable.
+
+    \item \textbf{System integration:} the frontend, backend,
+    database and ML components will be developed as separate
+    modules and tested before final integration.
 \end{itemize}
 
 \section{Summary}
-This project proposes a deployable web platform to reduce grievance handling delays in a tier-2/3 city context. It meets the course criteria by emphasizing time-to-value through rapid iterations, implementing CI/CD to support frequent safe releases, and using measurable evaluation criteria (especially time-to-acknowledgement). It remains focused on engineering workflow and scalability readiness rather than research-driven novelty.
+
+MeterIQ aims to provide a practical way of working with smart-meter
+data from Mathura and Bareilly.
+
+The project starts with understanding and cleaning the available
+meter readings and then builds two connected analytical components:
+anomaly detection and short-term load forecasting. The anomaly
+module is intended to highlight unusual behaviour, while the
+forecasting module provides an estimate of expected future
+consumption.
+
+The important part of the project is the connection between these
+results. Instead of showing an anomaly flag alone, MeterIQ will
+allow a user to look at the meter's historical behaviour, understand
+the context of the unusual reading and compare it with expected load
+behaviour.
+
+The final system will combine the data pipeline, machine learning
+models, database, backend APIs and web dashboard into one
+application. The project will focus on producing useful and
+explainable results while avoiding unsupported claims about
+electricity theft.
 
 \end{document}
