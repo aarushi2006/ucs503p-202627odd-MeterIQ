@@ -91,8 +91,8 @@ see its expected future load.
     will give us a reference point before trying more advanced models.
 
     \item After the ML part is working, we will connect it with the
-    backend, database and dashboard so that the results can be viewed
-    through one application.
+    backend, data storage and dashboard so that the results can be
+    viewed through one application.
 
     \item Git and GitHub will be used throughout the project so that
     changes can be tracked and the work can be developed in smaller
@@ -167,8 +167,8 @@ forecasting results.
 
     \item The forecasting module produces future load predictions.
 
-    \item The results are made available through the backend and
-    database.
+    \item The results are made available through the backend and data
+    storage layer.
 
     \item The dashboard allows the user to search for a meter, view
     its consumption history, check its risk level, understand the
@@ -192,8 +192,8 @@ forecasting results.
     \item An anomaly will be treated as an indicator for investigation
     and not as proof of electricity theft.
 
-    \item The frontend, backend, database and ML parts should be kept
-    separate enough that they can be developed and tested
+    \item The frontend, backend, data storage and ML parts should be
+    kept separate enough that they can be developed and tested
     independently.
 \end{itemize}
 
@@ -202,7 +202,7 @@ forecasting results.
 
 The project will combine data analysis, machine learning and normal
 software development. We will first understand the data and build
-the ML components, and then connect them to the backend, database
+the ML components, and then connect them to the backend, data storage
 and frontend.
 
 \subsection{Data understanding and preprocessing %
@@ -296,20 +296,19 @@ conclusion.
 The application will follow a simple full-stack structure.
 
 \begin{itemize}[leftmargin=0.7cm]
-    \item \textbf{Frontend:} React.js with HTML and CSS. A charting
-    library can be used to display consumption, anomaly and
-    forecasting results.
+    \item \textbf{Frontend:} A web-based interface will be developed
+    to display consumption, anomaly and forecasting results.
 
-    \item \textbf{Backend API:} Flask or FastAPI will be used to
-    provide APIs for meter information, anomaly results, forecasts
-    and dashboard data.
+    \item \textbf{Backend API:} A backend layer will connect the
+    frontend with the data processing and machine learning
+    components.
 
     \item \textbf{Data and ML layer:} Python, Pandas, NumPy and
     Scikit-learn will be used for data processing and machine
     learning.
 
-    \item \textbf{Database:} A suitable database will be used to store
-meter information, processed results and application data.
+    \item \textbf{Database:} A suitable database will be used to
+    store meter information, processed results and application data.
 
     \item \textbf{Version control:} Git and GitHub will be used to
     keep the project organised and track changes.
@@ -369,7 +368,7 @@ The software system will also be checked for:
     \item correct API responses;
     \item correct retrieval of meter data;
     \item correct display of anomaly and forecast results;
-    \item database consistency;
+    \item data storage consistency;
     \item response time where measurable;
     \item integration between the ML and web application layers; and
     \item reliability of the main user workflows.
@@ -399,9 +398,9 @@ datasets. The software architecture will be designed so that
 additional meters and future readings can be added later without
 changing the complete application structure.
 
-The database and API layers will remain separate from the model
-code, making it possible to update or retrain models as more data
-becomes available.
+The data storage and application layers will remain separate from
+the model code, making it possible to update or retrain models as
+more data becomes available.
 
 Future versions may support automated ingestion of new smart-meter
 readings and periodic model updates.
@@ -444,8 +443,8 @@ subsequent modelling stages.
     \item An explainability layer for anomaly investigation.
     \item A backend API connecting the analytical modules with the
     application.
-    \item A database for storing meter, anomaly and forecast
-    information.
+    \item A suitable data storage layer for meter, anomaly and
+    forecast information.
     \item A web dashboard for viewing and investigating results.
     \item Documentation and testing of the complete system.
 \end{itemize}
@@ -476,9 +475,9 @@ subsequent modelling stages.
     avoid claiming confirmed theft detection when reliable labels
     are unavailable.
 
-    \item \textbf{System integration:} the frontend, backend,
-    database and ML components will be developed as separate
-    modules and tested before final integration.
+    \item \textbf{System integration:} the frontend, backend, data
+    storage and ML components will be developed as separate modules
+    and tested before final integration.
 \end{itemize}
 
 \section{Summary}
@@ -500,7 +499,7 @@ the context of the unusual reading and compare it with expected load
 behaviour.
 
 The final system will combine the data pipeline, machine learning
-models, database, backend APIs and web dashboard into one
+models, data storage, backend APIs and web dashboard into one
 application. The project will focus on producing useful and
 explainable results while avoiding unsupported claims about
 electricity theft.
