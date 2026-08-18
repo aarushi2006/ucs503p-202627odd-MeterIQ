@@ -1,4 +1,2 @@
-**WEEKLY UPDATE**
-
-Aarushi Gahlawat (1024160008)
+**WEEKLY UPDATE** of Aarushi Gahlawat (1024160008)
 
