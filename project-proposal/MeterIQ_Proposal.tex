@@ -13,7 +13,7 @@
 \makeatletter
 \newcommand{\BvrSetLabInstructor}[1]{%
   \gdef\Bvr@LabInstructor{#1}}
-\newcommand{\Bvr@LabInstructor}{Dr. Raghav B. Venkataramaiyer}
+\newcommand{\Bvr@LabInstructor}{Mr.Jeelani}
 \newcommand{\BvrLabInstructorValue}{\Bvr@LabInstructor}
 \makeatother
 
@@ -32,15 +32,11 @@
 }
 \makeatother
 
-% Hints in the section title(s)
-\newcommand{\BvrHint}[1]{%
-  {\normalfont\normalsize\itshape\hfill #1}}
-
 % -----------------------------------------------------
 
 \title{MeterIQ: Explainable Smart Meter Analytics Platform}
 
-\BvrSetLabInstructor{Dr. Jeelani}
+\BvrSetLabInstructor{Mr. Jeelani}
 
 \BvrSubtitle{%
   Project Proposal for UCS503P\\
@@ -49,21 +45,23 @@
 }
 
 \author{
-  Yashit Arora, CSED%
-  \thanks{Roll No: \texttt{1024160006}, Email: \texttt{yarora1\_be24@thapar.edu}}
+  Yashit Arora, CSED\textsuperscript{*}
   \and
-  Aarushi Gahlawat, CSED%
-  \thanks{Roll No: \texttt{1024160008}, Email: \texttt{agahlawat\_be24@thapar.edu}}
+  Aarushi Gahlawat, CSED\textsuperscript{*}
 }
 
-\date{\today}
+\date{
+  \small
+  \textsuperscript{*}Roll No: 1024160006, Email: \texttt{yarora1\_be24@thapar.edu}\\
+  \textsuperscript{*}Roll No: 1024160008, Email: \texttt{agahlawat\_be24@thapar.edu}\\[0.5em]
+  \today
+}
 
 \begin{document}
 
 \maketitle
 
-\section{Higher-order goal%
-  \BvrHint{\ldots data-driven electricity monitoring}}
+\section{Higher-order goal}
 
 MeterIQ aims to make smart-meter data easier to analyse and use.
 The system will identify unusual consumption behaviour and provide
@@ -75,8 +73,7 @@ together in one platform so that a user can view a meter's
 consumption, investigate unusual behaviour and see its expected
 future load.
 
-\section{Time-to-value %
-  \BvrHint{\ldots primary heuristic}}
+\section{Time-to-value}
 
 \begin{itemize}[leftmargin=0.7cm]
 
@@ -109,8 +106,7 @@ future load in a way that is easier for a user to understand.
 An anomaly will be treated as a signal for further investigation,
 not as automatic proof of electricity theft.
 
-\section{Proposed Solution %
-  \BvrHint{\ldots Software Proposition}}
+\section{Proposed Solution}
 
 \subsection{Overview}
 
@@ -160,15 +156,13 @@ of being handled as separate analysis notebooks.
 
 \end{itemize}
 
-\section{Solution Approach %
-  \BvrHint{\ldots Engineering focus}}
+\section{Solution Approach}
 
 The project will follow a simple workflow: understand the data,
 prepare it, build the ML components and then connect them to the
 application.
 
-\subsection{Data understanding and preprocessing %
-  \BvrHint{\ldots data quality}}
+\subsection{Data understanding and preprocessing}
 
 The Mathura and Bareilly datasets will be inspected separately. The
 available data includes timestamp, energy consumption, average
@@ -179,8 +173,7 @@ duplicate records, checking unusual values and validating meter-wise
 data. Time-based, lag and rolling features will be created where
 useful.
 
-\subsection{Anomaly and risk detection %
-  \BvrHint{\ldots ML component}}
+\subsection{Anomaly and risk detection}
 
 The anomaly module will look for consumption behaviour that differs
 from a meter's usual pattern. Voltage, current, frequency and
@@ -194,8 +187,7 @@ The output will include an anomaly indication and supporting
 information so that the user can understand why a reading was
 flagged.
 
-\subsection{Short-term load forecasting %
-  \BvrHint{\ldots forecasting component}}
+\subsection{Short-term load forecasting}
 
 The forecasting module will use historical consumption to estimate
 future load. A simple historical baseline will be used first and
@@ -206,8 +198,7 @@ Lagged consumption, rolling statistics and calendar features will be
 considered. Models will be evaluated using MAE, RMSE and MAPE on a
 chronological test period.
 
-\subsection{Explainability %
-  \BvrHint{\ldots understandable results}}
+\subsection{Explainability}
 
 MeterIQ will show more than an anomaly flag. For a flagged reading,
 the user will be able to see the consumption pattern and relevant
@@ -217,8 +208,7 @@ The system will clearly separate model output from the information
 calculated from the data so that an anomaly is not presented as a
 confirmed cause.
 
-\subsection{Web architecture %
-  \BvrHint{\ldots web-based solution}}
+\subsection{Web architecture}
 
 The application will have a web-based frontend, a backend layer,
 data-processing and ML components, and a suitable data-storage
@@ -233,8 +223,7 @@ GitHub will be used throughout development. Automated testing and
 basic build checks can be added as the application develops to make
 changes easier to test and manage.
 
-\section{Evaluation Criterion %
-  \BvrHint{\ldots measurable and attributable}}
+\section{Evaluation Criterion}
 
 \subsection{Primary evaluation metric}
 
@@ -260,8 +249,7 @@ The application will also be checked for correct data retrieval,
 working API calls, correct display of results, basic response time
 and integration between the ML and application components.
 
-\subsection{Pilot validation plan %
-  \BvrHint{\ldots high-level}}
+\subsection{Pilot validation plan}
 
 Forecasting models will be tested chronologically so that future
 information is not used during training. Different models will be
@@ -270,8 +258,7 @@ compared using the same evaluation period.
 Anomaly results will be inspected at the meter level and compared
 with historical behaviour.
 
-\section{Scalability %
-  \BvrHint{\ldots with foresight}}
+\section{Scalability}
 
 The system will be designed so that additional meters and future
 readings can be added later. Keeping the data, ML and application
@@ -285,11 +272,9 @@ and continuity of its readings. Large gaps in the data may affect
 forecasting and anomaly analysis, so data availability will be
 considered before using a meter for detailed analysis.
 
-\section{Project scope and deliverables %
-  \BvrHint{\ldots iteration-friendly}}
+\section{Project scope and deliverables}
 
-\subsection{Initial deliverable %
-  \BvrHint{\ldots first iteration}}
+\subsection{Initial deliverable}
 
 The first deliverable will be a cleaned and documented version of
 the Mathura and Bareilly data with exploratory analysis of
