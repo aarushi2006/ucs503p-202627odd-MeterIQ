@@ -1,16 +1,13 @@
-﻿![Tiet Logo](assets/tiet-logo.svg){ .tiet-logo }
+![TIET Logo](assets/tiet-logo.svg){ .tiet-logo }
 
 **UCS503: Software Engineering (Project)**  
 **TIET Patiala**
 
-# MeterIQ-Explainable Smart Meter Analytics Platform
+# MeterIQ - Explainable Smart Meter Analytics Platform
 
-**Author(s)**:
- Aarushi Gahlawat | Yahit Arora 
+**Author(s):** Aarushi Gahlawat | Yahit Arora
 
-MeterIQ is an intelligent electricity consumption monitoring and anomaly
-detection system designed to identify unusual household electricity usage
-using smart meter data.
+---
 
 ## Project Overview
 
@@ -58,19 +55,6 @@ identify potentially anomalous consumption patterns.
 
 ## Project Structure
 
+```text
 code/       - Source code
 docs/       - Project documentation
-assets/     - Images and supporting resources
-journals/   - Project journals
-project-proposal/ - Project proposal
-project-report-final/ - Final project report
-
-## Running the Project
-
-Instructions for running the MeterIQ project will be added here once
-the implementation is finalized.
-
-## Expected Outcome
-
-The system should identify unusual electricity consumption patterns
-and present the results through an understandable interface.
