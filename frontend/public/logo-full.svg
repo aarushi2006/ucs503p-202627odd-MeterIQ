@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 40" fill="none">
+  <defs>
+    <linearGradient id="icon-bg" x1="0" y1="0" x2="40" y2="40">
+      <stop offset="0%" stop-color="#59b4ff"/>
+      <stop offset="100%" stop-color="#3d73df"/>
+    </linearGradient>
+    <linearGradient id="icon-bolt" x1="16" y1="6" x2="24" y2="34">
+      <stop offset="0%" stop-color="#fff"/>
+      <stop offset="100%" stop-color="#d0e8ff"/>
+    </linearGradient>
+  </defs>
+  <!-- Icon -->
+  <rect x="0" y="0" width="40" height="40" rx="10" fill="url(#icon-bg)"/>
+  <path d="M24 6L14 22h7l-3.5 12L28 20h-7l3.5-14z" fill="url(#icon-bolt)" stroke="#fff" stroke-width="1.2" stroke-linejoin="round"/>
+  <!-- Text -->
+  <text x="50" y="18" font-family="Manrope, sans-serif" font-weight="800" font-size="18" fill="#ffffff">Meter</text>
+  <text x="111" y="18" font-family="Manrope, sans-serif" font-weight="800" font-size="18" fill="#58b5ff">IQ</text>
+  <text x="50" y="34" font-family="DM Sans, sans-serif" font-weight="500" font-size="10" fill="#7b9ab8" letter-spacing="2">SMART METER ANALYTICS</text>
+</svg>
