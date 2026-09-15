@@ -86,7 +86,7 @@ locally, and added to the shared MeterIQ repository.
 - Perform system integration and testing.
 
 
-## 16/09/2026 — Project Documentation & Gantt Chart
+## 14/09/2026 — Project Documentation & Gantt Chart
 
 ### Work Completed
 - Created and updated the project Gantt Chart according to the current
